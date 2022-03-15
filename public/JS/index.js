@@ -20,6 +20,9 @@ let player1Score = 0;
 let player2Score = 0;
 let gameOver = false;
 let checkObstacleStatus = false;
+let countLeft=0;
+let countRight=0;
+const COLOR_CHANGE_DELAY=80;
 
 
 let COLORS = {
@@ -28,6 +31,7 @@ let COLORS = {
     stableObstacleColor: "cyan",
     movingObstacleColor1: "green",
     movingObstacleColor2: "#D68910",
+    wallHitColorChange:"#ff0000"
 };
 //paddle class *****************************************************************************
 class Paddle {
@@ -147,12 +151,16 @@ function ballCollisionWithWalls() {
         ball.dx = -ball.dx;
         ball.dy = ball.dy;
         if (ball.x + ball.radius > canvas.width) {
+            countRight=COLOR_CHANGE_DELAY;
             ballCollisionSound.play();
             player1Score++;
+            
         }
         if (ball.x - ball.radius < 0) {
+            countLeft=COLOR_CHANGE_DELAY;
             ballCollisionSound.play();
             player2Score++;
+
         }
     }
     if (ball.y - ball.radius < 0) {
@@ -346,8 +354,24 @@ function easy() {
 
     // drawing all the elemnents of game 
     function draw() {
-        paddleLeft.paddleDraw(COLORS.paddel1Color);
-        paddleRight.paddleDraw(COLORS.paddel2Color);
+        if(countLeft>0)
+        { 
+            countLeft--;
+            paddleLeft.paddleDraw(COLORS.wallHitColorChange);    
+        }
+        else{
+            paddleLeft.paddleDraw(COLORS.paddel1Color);    
+        }
+        if(countRight>0)
+        {
+            countRight--;
+            paddleRight.paddleDraw(COLORS.wallHitColorChange);
+        }else
+        {
+            paddleRight.paddleDraw(COLORS.paddel2Color);
+        }
+        // paddleLeft.paddleDraw(COLORS.paddel1Color);
+        // paddleRight.paddleDraw(COLORS.paddel2Color);
         drawBall();
         displayFunction("Score:" + player1Score, 35, 25);
         displayFunction("Score:" + player2Score, 990, 25);
@@ -388,6 +412,7 @@ function easy() {
     //update positions of game components
     function loop() {
         context.drawImage(BACKGROUND, 0, 0, 1100, 525);
+        
         if (isStart) {
             draw();
             update();
@@ -449,8 +474,24 @@ function medium() {
 
 
     function draw() {
-        paddleLeft.paddleDraw(COLORS.paddel1Color);
-        paddleRight.paddleDraw(COLORS.paddel2Color);
+        // paddleLeft.paddleDraw(COLORS.paddel1Color);
+        // paddleRight.paddleDraw(COLORS.paddel2Color);
+        if(countLeft>0)
+        { 
+            countLeft--;
+            paddleLeft.paddleDraw(COLORS.wallHitColorChange);    
+        }
+        else{
+            paddleLeft.paddleDraw(COLORS.paddel1Color);    
+        }
+        if(countRight>0)
+        {
+            countRight--;
+            paddleRight.paddleDraw(COLORS.wallHitColorChange);
+        }else
+        {
+            paddleRight.paddleDraw(COLORS.paddel2Color);
+        }
         drawBall();
         obs1.obstacleDraw(COLORS.stableObstacleColor);
         obsH.obstacleDraw(COLORS.stableObstacleColor);
@@ -550,8 +591,24 @@ function hard() {
     movingObstacle2 = new Obstacle(canvas.width / 2 + 20, canvas.height - 50, 10, 60);
 
     function draw() {
-        paddleLeft.paddleDraw(COLORS.paddel1Color);
-        paddleRight.paddleDraw(COLORS.paddel2Color);
+        // paddleLeft.paddleDraw(COLORS.paddel1Color);
+        // paddleRight.paddleDraw(COLORS.paddel2Color);
+        if(countLeft>0)
+        { 
+            countLeft--;
+            paddleLeft.paddleDraw(COLORS.wallHitColorChange);    
+        }
+        else{
+            paddleLeft.paddleDraw(COLORS.paddel1Color);    
+        }
+        if(countRight>0)
+        {
+            countRight--;
+            paddleRight.paddleDraw(COLORS.wallHitColorChange);
+        }else
+        {
+            paddleRight.paddleDraw(COLORS.paddel2Color);
+        }
         drawBall();
         movingObstacle1.obstacleDraw(COLORS.movingObstacleColor1);
         movingObstacle2.obstacleDraw(COLORS.movingObstacleColor2);
